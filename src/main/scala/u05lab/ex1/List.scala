@@ -59,11 +59,17 @@ enum List[A]:
   def reverse(): List[A] = foldLeft[List[A]](Nil())((l, e) => e :: l)
 
   /** EXERCISES */
-  def zipRight: List[(A, Int)] = ???
+  def zipRight: List[(A, Int)] =
+    var result: List[(A, Int)] = List.Nil()
+    for i <-0 until this.length  do result = result.append(List((this.get(i).get, i)))
+    result
 
-  def partition(pred: A => Boolean): (List[A], List[A]) = ???
+
+  def partition(pred: A => Boolean): (List[A], List[A]) =
+    (filter(pred), filter(!pred(_)))
 
   def span(pred: A => Boolean): (List[A], List[A]) = ???
+
 
   /** @throws UnsupportedOperationException if the list is empty */
   def reduce(op: (A, A) => A): A = ???
