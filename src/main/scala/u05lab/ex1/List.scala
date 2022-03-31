@@ -2,6 +2,9 @@ package u05lab.ex1
 
 import u05lab.ex1.List
 
+import javax.xml.transform.Result
+import scala.::
+
 // Ex 1. implement the missing methods both with recursion or with using fold, map, flatMap, and filters
 // List as a pure interface
 enum List[A]:
@@ -58,6 +61,7 @@ enum List[A]:
 
   def reverse(): List[A] = foldLeft[List[A]](Nil())((l, e) => e :: l)
 
+
   /** EXERCISES */
   def zipRight: List[(A, Int)] =
     var result: List[(A, Int)] = List.Nil()
@@ -68,13 +72,30 @@ enum List[A]:
   def partition(pred: A => Boolean): (List[A], List[A]) =
     (filter(pred), filter(!pred(_)))
 
-  def span(pred: A => Boolean): (List[A], List[A]) = ???
-
+  def span(pred: A => Boolean): (List[A], List[A]) =
+    def _span(l: List[A], firstElemsMatch: List[A], otherElems: List[A]): (List[A], List[A]) =
+      l match
+        case h :: t if pred(h) => _span(t,firstElemsMatch.append(List(h)), otherElems)
+        case _ => (firstElemsMatch, otherElems.append(l))
+    _span(this, Nil(), Nil())
 
   /** @throws UnsupportedOperationException if the list is empty */
-  def reduce(op: (A, A) => A): A = ???
+  def reduce(op: (A, A) => A): A =
+    if this.head.isEmpty then throw new UnsupportedOperationException else tail.get.foldLeft(this.head.get)(op)
 
-  def takeRight(n: Int): List[A] = ???
+  def takeLeft(n: Int): List[A] =
+    def _takeLeft(l: List[A], result: List[A], n: Int): List[A] = l match
+      case h :: t if n > 0 => _takeLeft(t, result.append(List(h)), n - 1)
+      case _ => result
+    _takeLeft(this, Nil(), n)
+
+  def takeRight(n: Int): List[A] =
+    reverse().takeLeft(n).reverse()
+
+//    var result: List[A] = List.Nil()
+//    (length - 1 to length - n by -1).foreach( i => result = result.append(List(get(i).get)))
+//    result.reverse()
+
 
 // Factories
 object List:

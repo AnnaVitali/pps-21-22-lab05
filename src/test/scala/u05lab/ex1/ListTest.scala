@@ -19,4 +19,19 @@ class ListTest {
   def testSpan(): Unit =
     assertEquals((List(1), List(2, 3, 4)), reference.span(_ % 2 != 0))
     assertEquals((List(1, 2), List(3, 4)), reference.span(_ < 3))
+
+  @Test
+  def testReduce(): Unit  =
+    assertEquals(10, reference.reduce(_ + _))
+    assertThrows(classOf[UnsupportedOperationException], () => Nil.reduce[Int](_ + _))
+
+
+  @Test
+  def testTakeLeft(): Unit  =
+    assertEquals(List(1, 2, 3), reference.takeLeft(3))
+
+  @Test
+  def testTakeRight(): Unit  =
+    assertEquals(List(2, 3, 4), reference.takeRight(3))
+
 }
