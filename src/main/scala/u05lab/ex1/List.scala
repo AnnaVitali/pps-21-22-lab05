@@ -64,10 +64,7 @@ enum List[A]:
 
   /** EXERCISES */
   def zipRight: List[(A, Int)] =
-    var result: List[(A, Int)] = List.Nil()
-    for i <-0 until this.length  do result = result.append(List((this.get(i).get, i)))
-    result
-
+   foldLeft((List[(A,Int)](), 0))((acc,elem) => (acc._1.append(List((elem, acc._2))), acc._2 + 1))._1
 
   def partition(pred: A => Boolean): (List[A], List[A]) =
     (filter(pred), filter(!pred(_)))
@@ -83,19 +80,8 @@ enum List[A]:
   def reduce(op: (A, A) => A): A =
     if this.head.isEmpty then throw new UnsupportedOperationException else tail.get.foldLeft(this.head.get)(op)
 
-  def takeLeft(n: Int): List[A] =
-    def _takeLeft(l: List[A], result: List[A], n: Int): List[A] = l match
-      case h :: t if n > 0 => _takeLeft(t, result.append(List(h)), n - 1)
-      case _ => result
-    _takeLeft(this, Nil(), n)
-
   def takeRight(n: Int): List[A] =
-    reverse().takeLeft(n).reverse()
-
-//    var result: List[A] = List.Nil()
-//    (length - 1 to length - n by -1).foreach( i => result = result.append(List(get(i).get)))
-//    result.reverse()
-
+    foldLeft((this, length - n))((acc, elem) => ({if acc._2 > 0 then acc._1.tail.get else acc._1 } , acc._1.tail.get.length - n))._1
 
 // Factories
 object List:

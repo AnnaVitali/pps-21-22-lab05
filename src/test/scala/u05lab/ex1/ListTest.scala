@@ -25,11 +25,6 @@ class ListTest {
     assertEquals(10, reference.reduce(_ + _))
     assertThrows(classOf[UnsupportedOperationException], () => Nil.reduce[Int](_ + _))
 
-
-  @Test
-  def testTakeLeft(): Unit  =
-    assertEquals(List(1, 2, 3), reference.takeLeft(3))
-
   @Test
   def testTakeRight(): Unit  =
     assertEquals(List(2, 3, 4), reference.takeRight(3))
